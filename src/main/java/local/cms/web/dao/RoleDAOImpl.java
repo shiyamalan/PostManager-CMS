@@ -9,14 +9,30 @@ import org.hibernate.Transaction;
 
 import local.cms.web.models.UserRole;
 
+/***
+ * Role DAO layer management for managing the user role
+ * 
+ * @author shiyam
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 public class RoleDAOImpl implements RoleDAO {
 
 	SessionFactory sessionFactory;
 
+	/***
+	 * 
+	 * @param sessionFactory
+	 */
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 
+	
+	/***
+	 * Saves the user role
+	 * @param role, User role manages the role information
+	 */
 	@Transactional
 	public UserRole saveRole(UserRole role) {
 		Session session = this.sessionFactory.openSession();
@@ -28,6 +44,9 @@ public class RoleDAOImpl implements RoleDAO {
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see local.cms.web.dao.RoleDAO#isAdmin(java.lang.String)
+	 */
 	public boolean isAdmin(String user) {
 		Session session = this.sessionFactory.openSession();
 		Query query = session.createQuery(
@@ -35,8 +54,9 @@ public class RoleDAOImpl implements RoleDAO {
 		query.setParameter("username", user);
 		String role = (String) query.uniqueResult();
 		session.close();
-		System.out.println(role != null && role.equals("ROLE_ADMIN")?true:false);
-		return role != null && role.equals("ROLE_ADMIN")?true:false;
+		System.out.println(
+				role != null && role.equals("ROLE_ADMIN") ? true : false);
+		return role != null && role.equals("ROLE_ADMIN") ? true : false;
 	}
 
 }

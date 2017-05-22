@@ -28,8 +28,8 @@ import local.cms.web.models.Status;
 import local.cms.web.models.User;
 import local.cms.web.services.PostService;
 import local.cms.web.services.RoleService;
-import local.cms.web.util.CustomUtil;
-import local.cms.web.util.UserInfor;
+import local.cms.web.util.Util;
+import local.cms.web.util.UserUtil;
 /***
  * 
  * @author shiyam
@@ -54,26 +54,44 @@ public class WebPageController {
 
 	}
 
+	/***
+	 * Get the post page to create the new page
+	 * 
+	 * @param modelMap
+	 * @return
+	 */
 	@RequestMapping(value = "/post/create", method = RequestMethod.GET)
 	public String showCreationPage(ModelMap modelMap) {
 		modelMap.addAttribute("post", new Post());
 
 		return "editor";
 	}
+
+	/***
+	 * create the post with different status
+	 * 
+	 * @param post
+	 * @param action
+	 * @param result
+	 * @param model
+	 * @param request
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequestMapping(value = "/post/create", method = RequestMethod.POST)
 	public String createPost(@ModelAttribute("post") Post post,
-			@RequestParam(value = "preview",required=false) String action,
+			@RequestParam(value = "preview", required = false) String action,
 			BindingResult result, Model model, HttpServletRequest request,
 			final RedirectAttributes redirectAttributes) {
 
-		String user = UserInfor.getUserNameInSession(request);
+		String user = UserUtil.getUserNameInSession(request);
 		if (user == null) {
 			model.addAttribute("user", new User());
 			return "redirect:/login";
 		}
 		if (post.getStatusID() == 1) {
 			post.setStatus(Status.Draft);
-			CustomUtil.converStringfromByte(post);
+			Util.converStringfromByte(post);
 			redirectAttributes.addFlashAttribute("post", post);
 
 			return "redirect:/post/preview/0";
@@ -82,55 +100,67 @@ public class WebPageController {
 			post.setPublish(new Date());
 			post.setUsername(user);
 			postService.createNewPost(post);
-			CustomUtil.converStringfromByte(post);
+			Util.converStringfromByte(post);
 
 			model.addAttribute("post", post);
 
-			
 		} else if (post.getStatusID() == 3) {
 			post.setStatus(Status.ReadyPublish);
 			post.setPublish(new Date());
 			post.setUsername(user);
 			postService.createNewPost(post);
-			
-			CustomUtil.converStringfromByte(post);
-			
+
+			Util.converStringfromByte(post);
+
 		}
 
-		
-		if(!roleService.isAdmin(user))
-		{
-			model.addAttribute("posts",postService.getAllByUser(user));
+		if (!roleService.isAdmin(user)) {
+			model.addAttribute("posts", postService.getAllByUser(user));
 			return "redirect:/main";
 		}
 		return "";
 	}
 
+	/***
+	 * Gives the post information to page
+	 * 
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/post/view", method = RequestMethod.GET)
 	public String showPost(HttpServletResponse response,
 			HttpServletRequest request, Model model) {
 
-		String userName = UserInfor.getUserNameInSession(request);
+		String userName = UserUtil.getUserNameInSession(request);
 		if (userName == null) {
 			return "login";
 		}
 		if (roleService.isAdmin(userName)) {
 			List<Post> posts = postService.listPost();
 			for (Post post : posts) {
-				CustomUtil.converStringfromByte(post);
+				Util.converStringfromByte(post);
 			}
 			model.addAttribute("posts", posts);
 			return "postview_admin";
 		} else {
 			List<Post> posts = postService.getAllByUser(null);
 			for (Post post : posts) {
-				CustomUtil.converStringfromByte(post);
+				Util.converStringfromByte(post);
 			}
 			model.addAttribute("posts", posts);
 			return "viewUser";
 		}
 	}
 
+	/***
+	 * 
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/post/viewUser", method = RequestMethod.GET)
 	public String showUserPost(HttpServletResponse response,
 			HttpServletRequest request, Model model) {
@@ -140,6 +170,14 @@ public class WebPageController {
 		return "viewUser";
 	}
 
+	/***
+	 * Change the post status to new satus
+	 * 
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/post/state", method = RequestMethod.POST)
 	public String changeState(HttpServletResponse response,
 			HttpServletRequest request, Model model) {
@@ -165,23 +203,29 @@ public class WebPageController {
 			postService.updatePost(post);
 		}
 
-		if (roleService.isAdmin(UserInfor.getUserNameInSession(request))) {
+		if (roleService.isAdmin(UserUtil.getUserNameInSession(request))) {
 			List<Post> posts = postService.listPost();
 			for (Post post : posts) {
-				CustomUtil.converStringfromByte(post);
+				Util.converStringfromByte(post);
 			}
 			model.addAttribute("posts", posts);
 			return "redirect:/admin";
 		} else {
 			List<Post> posts = postService.getAllByUser(null);
 			for (Post post : posts) {
-				CustomUtil.converStringfromByte(post);
+				Util.converStringfromByte(post);
 			}
 			model.addAttribute("posts", posts);
 			return "redirect:/welcomepage_normaluser";
 		}
 	}
 
+	/***
+	 * View the post for given the post id
+	 * 
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value = "/post/preview/{id}")
 	public ModelAndView previewPost(@PathVariable int id) {
 		Post post = postService.getById(id);
@@ -197,26 +241,32 @@ public class WebPageController {
 		return "page";
 	}
 
-	@RequestMapping(value = "/post/previews", method = RequestMethod.POST)
-	public String previews(HttpServletResponse response,
-			HttpServletRequest request, Model model,
-			final RedirectAttributes redirectAttributes) {
-		int id = ServletRequestUtils.getIntParameter(request, "id", 0);
-		Post post = postService.getById(id);
-		CustomUtil.converStringfromByte(post);
-		redirectAttributes.addFlashAttribute("post", post);
-
-		return "redirect:/post/preview";
-	}
+	/***
+	 * Show the edditing post view for give post id
+	 * 
+	 * @param response
+	 * @param request
+	 * @param model
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value = "/post/edit/{id}", method = RequestMethod.GET)
 	public String editPost(HttpServletResponse response,
 			HttpServletRequest request, Model model, @PathVariable int id) {
 		Post post = postService.getById(id);
-		CustomUtil.converStringfromByte(post);
+		Util.converStringfromByte(post);
 		model.addAttribute("post", post);
 		return "posteditor";
 	}
 
+	/***
+	 * Get the banner image for given the post id
+	 * 
+	 * @param itemId
+	 * @param response
+	 * @param request
+	 * @throws IOException
+	 */
 	@RequestMapping(value = "/post/preview/image/{id}", method = RequestMethod.GET)
 	public void showImage(@PathVariable("id") Integer itemId,
 			HttpServletResponse response, HttpServletRequest request)

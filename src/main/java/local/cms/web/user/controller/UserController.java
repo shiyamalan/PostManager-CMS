@@ -14,7 +14,7 @@ import local.cms.web.models.Post;
 import local.cms.web.models.User;
 import local.cms.web.services.PostService;
 import local.cms.web.services.RoleService;
-import local.cms.web.util.UserInfor;
+import local.cms.web.util.UserUtil;
 
 @Controller
 public class UserController {
@@ -30,11 +30,19 @@ public class UserController {
 		this.postService = postService;
 	}
 
+	/***
+	 * show the editor user not admin
+	 * 
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/editor", method = RequestMethod.GET)
 	public String showMain(HttpServletRequest request,
 			HttpServletResponse response, ModelMap model) {
 
-		String user = UserInfor.getUserNameInSession(request);
+		String user = UserUtil.getUserNameInSession(request);
 		if (user == null) {
 			model.addAttribute("user", new User());
 		}
@@ -44,11 +52,19 @@ public class UserController {
 		return "welcomepage_normaluser";
 	}
 
+	/***
+	 * show the main page for normal user
+	 * 
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
 	public String showHome(HttpServletRequest request,
 			HttpServletResponse response, ModelMap model) {
 
-		String user = UserInfor.getUserNameInSession(request);
+		String user = UserUtil.getUserNameInSession(request);
 		if (user == null) {
 			model.addAttribute("user", new User());
 		} else {

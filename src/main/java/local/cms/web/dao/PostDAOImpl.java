@@ -11,6 +11,13 @@ import org.hibernate.Transaction;
 
 import local.cms.web.models.Post;
 
+/**
+ * 
+ * @author shiyam
+ * @since 1.0.0
+ * 
+ *        Contains the web DAO layer implementation for post management
+ */
 public class PostDAOImpl implements PostDAO {
 
 	SessionFactory sessionFactory;
@@ -19,7 +26,11 @@ public class PostDAOImpl implements PostDAO {
 		this.sessionFactory = sessionFactory;
 	}
 
-
+	/***
+	 * Creates new post information on database
+	 * 
+	 * @param post
+	 */
 	@Transactional
 	public void createNewPost(Post post) {
 		Session session = this.sessionFactory.openSession();
@@ -33,7 +44,12 @@ public class PostDAOImpl implements PostDAO {
 
 	}
 
-	
+	/***
+	 * updates the post details on database
+	 * 
+	 * @param post
+	 * @return new post
+	 */
 	@Transactional
 	public Post updatePost(Post post) {
 		Session session = this.sessionFactory.openSession();
@@ -46,7 +62,10 @@ public class PostDAOImpl implements PostDAO {
 
 	}
 
-
+	/***
+	 * 
+	 * @return all posts posted by all users
+	 */
 	public List<Post> listPost() {
 		Session session = this.sessionFactory.openSession();
 		List<Post> posts = session.createQuery("from Post").list();
@@ -54,7 +73,12 @@ public class PostDAOImpl implements PostDAO {
 		return posts;
 	}
 
-	
+	/**
+	 * Get the post posted by given user name
+	 * 
+	 * @param userName
+	 * @return
+	 */
 	public List<Post> getAllByUser(String userName) {
 		Session session = this.sessionFactory.openSession();
 		List<Post> posts = session
@@ -64,7 +88,12 @@ public class PostDAOImpl implements PostDAO {
 		return posts;
 	}
 
-	
+	/***
+	 * Get the post for given post id
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public Post getById(int id) {
 		Session session = this.sessionFactory.openSession();
 		Post posts = (Post) session.get(Post.class, new Integer(id));

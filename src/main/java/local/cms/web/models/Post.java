@@ -15,6 +15,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+/***
+ * Entity class to manage the post information
+ * 
+ * @author shiyam
+ * @version 1.0.0 @since1.0.0
+ */
 @Entity
 @Table(name = "blog_posts")
 public class Post {
@@ -28,7 +34,7 @@ public class Post {
 	private Date modified;
 	private String username;
 	private String imageSrc;
-	
+
 	private int statusID;
 
 	@Transient

@@ -8,6 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/***
+ * To manage the user role information
+ * 
+ * @author shiyam
+ * @since 1.0.0
+ * @version 1.0.0
+ */
 @Entity
 @Table(name = "user_roles")
 public class UserRole {

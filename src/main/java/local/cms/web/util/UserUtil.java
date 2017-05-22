@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import local.cms.web.models.User;
 
-public class UserInfor {
+public class UserUtil {
 
 	public static String getUserNameInSession(HttpServletRequest request) {
 		HttpSession session = request.getSession();

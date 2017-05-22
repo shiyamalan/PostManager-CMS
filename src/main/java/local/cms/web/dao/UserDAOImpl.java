@@ -12,6 +12,16 @@ import org.hibernate.Transaction;
 
 import local.cms.web.models.User;
 
+/***
+ * Implementation of User Data Layer
+ * @author shiyam
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+/**
+ * @author shiyam
+ *
+ */
 public class UserDAOImpl implements UserDAO {
 
 	SessionFactory sessionFactory;
@@ -22,6 +32,10 @@ public class UserDAOImpl implements UserDAO {
 		this.sessionFactory = sessionFactory;
 	}
 
+	
+	/* (non-Javadoc)
+	 * @see local.cms.web.dao.UserDAO#createUser(local.cms.web.models.User)
+	 */
 	@Transactional
 	public User createUser(User user) {
 		Session session = this.sessionFactory.openSession();

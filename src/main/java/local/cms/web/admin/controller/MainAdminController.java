@@ -19,6 +19,13 @@ import local.cms.web.services.PostService;
 import local.cms.web.services.RoleService;
 import local.cms.web.services.UserService;
 
+/***
+ * 
+ * @author shiyam
+ * @since 1.0
+ * 
+ * Contains Web Services for Admin related pages
+ */
 @Controller
 public class MainAdminController {
 
@@ -79,21 +86,16 @@ public class MainAdminController {
 
 		String newUser = user.getUsername();
 		String passWord = user.getPassword();
-		
-		
- 		if(newUser.equals("") || passWord.equals(""))
-		{
+
+		if (newUser.equals("") || passWord.equals("")) {
 			model.addAttribute("message", "User Name or Password not Empty");
 			return "registeration";
-		}
-		else
-		{
+		} else {
 			List<User> userList = userService.listUsers();
-			for(User u:userList)
-			{
-				if(u.getUsername().equals(newUser))
-				{
-					model.addAttribute("message", "Already user name is available!");
+			for (User u : userList) {
+				if (u.getUsername().equals(newUser)) {
+					model.addAttribute("message",
+							"Already user name is available!");
 					return "registeration";
 				}
 			}
@@ -114,6 +116,6 @@ public class MainAdminController {
 				return "redirect:/admin";
 			}
 		}
-		
+
 	}
 }

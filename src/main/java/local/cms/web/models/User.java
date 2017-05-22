@@ -7,19 +7,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /***
+ * User entity with users table
  * 
  * @author shiyam User Entity Class with table name users
+ * @since 1.0.0
+ * @version 1.0.0
  */
 @Entity
 @Table(name = "users")
 public class User {
-	
+
 	@Id
 	private String username;
 	private String password;
 	@Column(name = "enabled")
 	private boolean isEnabled = true;
-
 
 	@Id
 	@Column(name = "username", nullable = false)

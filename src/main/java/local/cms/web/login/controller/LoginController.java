@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,11 +18,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import local.cms.web.models.Post;
 import local.cms.web.models.User;
-import local.cms.web.models.UserRole;
 import local.cms.web.services.PostService;
 import local.cms.web.services.RoleService;
 import local.cms.web.services.UserService;
 
+/***
+ * Manages the Login activity and user management controller
+ * 
+ * @author shiyam
+ *
+ */
 @Controller
 public class LoginController {
 
@@ -52,7 +56,14 @@ public class LoginController {
 		return model;
 	}
 
-	// controller method used to logout
+	/***
+	 * Logout the user from the HttpSession
+	 * 
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/logout")
 	public String logout(HttpServletRequest request,
 			HttpServletResponse response, Model model) {
@@ -62,6 +73,14 @@ public class LoginController {
 		model.addAttribute("user", new User());
 		return "login";
 	}
+	/***
+	 * Login the user and enable the session for future communication
+	 * 
+	 * @param request
+	 * @param response
+	 * @param userDetails
+	 * @return
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView userAuth(HttpServletRequest request,
 			HttpServletResponse response,
@@ -69,9 +88,8 @@ public class LoginController {
 		System.out.println("method userAuth");
 		User user = userService.login(userDetails, request.getSession());
 
-		
 		if (user == null) {
-			ModelAndView view=  new ModelAndView("login");
+			ModelAndView view = new ModelAndView("login");
 			view.addObject("message", "User Name or password is incorrect");
 			return view;
 		} else {
@@ -100,17 +118,28 @@ public class LoginController {
 
 	}
 
+	/***
+	 * Change the user status to enabled or disabled
+	 * 
+	 * @param user
+	 * @param suspend
+	 * @param enabled
+	 * @param result
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequestMapping(value = "/user/suspend", method = RequestMethod.GET)
+	public String updateUserEnabled(@ModelAttribute("userForm") User user,
+			@RequestParam(value = "suspend") String suspend,
+			@RequestParam(value = "enabled") Boolean enabled,
+			BindingResult result, Model model,
+			final RedirectAttributes redirectAttributes) {
 
-	
-
-    @RequestMapping(value = "/user/suspend", method = RequestMethod.GET)
-    public String updateUserEnabled(@ModelAttribute("userForm") User user, @RequestParam(value = "suspend") String suspend,@RequestParam(value = "enabled") Boolean enabled,
-                             BindingResult result, Model model, final RedirectAttributes redirectAttributes){
-
-        user.setUsername(suspend);
-        user.setEnabled(enabled);
-        userService.updateUserEnableStatus(user);
-        return "redirect:/admin";
-    }
+		user.setUsername(suspend);
+		user.setEnabled(enabled);
+		userService.updateUserEnableStatus(user);
+		return "redirect:/admin";
+	}
 
 }
