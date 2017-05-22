@@ -1,6 +1,6 @@
 <%@ include file="/common/include.jsp"%>
 <head>
-<title>Preview</title>
+<title>Post Preview</title>
 <link rel="stylesheet" href="../../resources/css/navigation.css"
 	type="text/css" />
 </head>

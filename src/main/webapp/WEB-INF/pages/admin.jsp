@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html>
 <head>
-<title><fmt:message key="web.app.admin" /></title>
+<title><fmt:message key="Admin Control Panel" /></title>
 <link rel="stylesheet" href="resources/css/theme.css" type="text/css" />
 <link rel="stylesheet" href="resources/css/navigation.css"
 	type="text/css" />

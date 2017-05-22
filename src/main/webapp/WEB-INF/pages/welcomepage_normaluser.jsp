@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html>
 <head>
-<title>Title</title>
+<title>View Posts</title>
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script>
 	tinymce.init({

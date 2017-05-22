@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html>
 <head>
-<title>Add New Post</title>
+<title>Edit the Post</title>
 
 <link rel="stylesheet" href="../../resources/css/theme.css">
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
